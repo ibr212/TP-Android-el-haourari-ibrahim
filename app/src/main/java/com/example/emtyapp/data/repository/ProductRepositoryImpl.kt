@@ -10,36 +10,61 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
-
-
-class ProductRepositoryImpl(
-    private val localDataSource: ProductDataSource = LocalProductDataSource(),
-    private val remoteDataSource: ProductDataSource = RemoteProductDataSource()
+import com.example.emtyapp.data.Api.ProductApi
+import android.util.Log
+import java.io.Console
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+class ProductRepositoryImpl @Inject constructor(
+    private val localDataSource: ProductDataSource,
+    private val remoteDataSource: RemoteProductDataSource
 ) : ProductRepository {
 
-    // Cache en mémoire pour optimiser les performances
     private var cachedProducts: List<Product>? = null
+    private var lastFetchTime: Long = 0
+    private val CACHE_DURATION = TimeUnit.MINUTES.toMillis(5) // 5 minutes cache
 
     override suspend fun getProducts(): Flow<Result<List<Product>>> = flow {
         emit(Result.Loading)
 
         try {
-            // Essayons d'abord d'utiliser le cache
-            cachedProducts?.let {
+            // Vérifier si le cache est valide
+            val shouldFetchFromNetwork = cachedProducts == null ||
+                    (System.currentTimeMillis() - lastFetchTime) > CACHE_DURATION.toLong()
+
+            if (!shouldFetchFromNetwork) {
+                cachedProducts?.let {
+                    emit(Result.Success(it))
+                    return@flow
+                }
+            }
+
+            // Essayer le réseau d'abord (stratégie réseau-premier)
+            val remoteProducts = try {
+                remoteDataSource.getProducts().also {
+                    // Mettre à jour le cache et la source locale
+                    cachedProducts = it
+                    lastFetchTime = System.currentTimeMillis()
+                    //localDataSource.saveProducts(it)
+                }
+            } catch (e: Exception) {
+                Log.w("ProductRepo", "Network failed, falling back to local", e)
+                null
+            }
+
+            // Si le réseau a réussi, émettre les résultats
+            remoteProducts?.let {
                 emit(Result.Success(it))
                 return@flow
             }
 
-            // Sinon, charger depuis la source locale
+            // Fallback local
             val localProducts = localDataSource.getProducts()
             if (localProducts.isNotEmpty()) {
                 cachedProducts = localProducts
                 emit(Result.Success(localProducts))
             } else {
-                // Si vide, charger depuis le réseau
-                val remoteProducts = remoteDataSource.getProducts()
-                cachedProducts = remoteProducts
-                emit(Result.Success(remoteProducts))
+                emit(Result.Error("Aucun produit disponible"))
             }
         } catch (e: Exception) {
             emit(Result.Error("Erreur lors du chargement des produits", e))

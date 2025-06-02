@@ -1,32 +1,33 @@
 package com.example.emtyapp.mvi.viewmodel
+
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.emtyapp.data.model.Result
 import com.example.emtyapp.data.repository.ProductRepository
-import com.example.emtyapp.data.repository.ProductRepositoryImpl
-import com.example.emtyapp.mvi.intent.ViewIntent
-import com.example.emtyapp.mvi.model.ViewState
+import com.example.emtyapp.mvi.intent.ProductListIntent
+import com.example.emtyapp.mvi.model.ProductListState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-class ProductListViewModel(
-    private val repository: ProductRepository = ProductRepositoryImpl()
-) : BaseViewModel<ViewState.ProductListState>() {
-    override fun initialState(): ViewState.ProductListState =
-        ViewState.ProductListState(isLoading = true)
+import javax.inject.Inject
 
-    override fun processIntent(intent: ViewIntent) {
+@HiltViewModel
+class ProductListViewModel @Inject constructor(
+    private val repository: ProductRepository
+) : ViewModel() {
+
+    // State
+    private val _state = MutableStateFlow(ProductListState.initial())
+    val state: StateFlow<ProductListState> = _state
+
+    // Intent processor
+    fun processIntent(intent: ProductListIntent) {
         when (intent) {
-            is ViewIntent.ProductListIntent.LoadProducts -> loadProducts()
-            is ViewIntent.ProductListIntent.RefreshProducts -> refreshProducts()
-            is ViewIntent.ProductListIntent.ProductSelected -> {
-                // Logique pour la sélection d'un produit (analytics, etc.)
-            }
-
-            else -> {} // Ignorer les autres intents
+            is ProductListIntent.LoadProducts -> loadProducts()
+            is ProductListIntent.RefreshProducts -> refreshProducts()
+            is ProductListIntent.ProductSelected -> handleProductSelected(intent.productId)
         }
     }
 
@@ -37,20 +38,18 @@ class ProductListViewModel(
             repository.getProducts().collectLatest { result ->
                 when (result) {
                     is Result.Success -> {
-                        _state.value = ViewState.ProductListState(
+                        _state.value = ProductListState(
                             products = result.data,
                             isLoading = false,
                             error = null
                         )
                     }
-
                     is Result.Error -> {
                         _state.value = _state.value.copy(
                             isLoading = false,
                             error = result.message
                         )
                     }
-
                     is Result.Loading -> {
                         _state.value = _state.value.copy(isLoading = true)
                     }
@@ -71,9 +70,8 @@ class ProductListViewModel(
                         error = refreshResult.message
                     )
                 }
-
                 is Result.Loading -> {
-                    // Rien à faire ici
+                    // No action needed
                 }
             }
         }

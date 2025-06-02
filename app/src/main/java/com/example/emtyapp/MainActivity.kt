@@ -44,7 +44,8 @@ import com.example.emtyapp.nav.AppNavigation
 import com.example.emtyapp.nav.Routes
 import com.example.emtyapp.ui.theme.EmtyAppTheme
 import kotlinx.coroutines.delay
-
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,0 +1,74 @@
+[
+  {
+    "productID": "REFAZER",
+    "productTitle": "Tablette SAM 12 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "samsung-tab-12.png",
+    "category": "tablet",
+    "prouctPrice": "2334 DH"
+  },
+  {
+    "productID": "EFRRR",
+    "productTitle": "IPhone 14",
+    "productDescription": "Description du produit",
+    "productImage": "iphone-14.png",
+    "category": "phone",
+    "prouctPrice": "11000 DH"
+  },
+  {
+    "productID": "RIFAZER",
+    "productTitle": "Tablette SAM 12 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "samsung-tab-12.png",
+    "category": "tablet",
+    "prouctPrice": "2334 DH"
+  },
+  {
+    "productID": "SQZEE",
+    "productTitle": "Smart TV 48 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "tv-samsung-48.png",
+    "category": "smarttv",
+    "prouctPrice": "8000 DH"
+  },
+  {
+    "productID": "RTVVV",
+    "productTitle": "IPhone 14",
+    "productDescription": "Description du produit",
+    "productImage": "iphone-14.png",
+    "category": "phone",
+    "prouctPrice": "11000 DH"
+  },
+  {
+    "productID": "SQPEE",
+    "productTitle": "Smart TV 48 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "tv-samsung-48.png",
+    "category": "smarttv",
+    "prouctPrice": "8000 DH"
+  },
+  {
+    "productID": "RTRAZE",
+    "productTitle": "Tablette SAM 12 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "samsung-tab-12.png",
+    "category": "tablet",
+    "prouctPrice": "2334 DH"
+  },
+  {
+    "productID": "SVZEE",
+    "productTitle": "Smart TV 48 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "tv-samsung-48.png",
+    "category": "smarttv",
+    "prouctPrice": "8000 DH"
+  },
+  {
+    "productID": "RURETR",
+    "productTitle": "Tablette SAM 12 Pouce",
+    "productDescription": "Description du produit",
+    "productImage": "samsung-tab-12.png",
+    "category": "tablet",
+    "prouctPrice": "2334 DH"
+  }
+]

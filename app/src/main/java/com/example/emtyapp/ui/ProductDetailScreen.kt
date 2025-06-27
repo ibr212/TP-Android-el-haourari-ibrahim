@@ -51,9 +51,11 @@ fun ProductDetailScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black
-                )
+                ),
+                windowInsets = WindowInsets(0.dp)
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(0.dp)
     ) { padding ->
         Box(modifier = Modifier.fillMaxSize()) {
             state.product?.let { product ->

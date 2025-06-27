@@ -67,7 +67,9 @@ fun ProductCard(product: com.example.emtyapp.data.model.Product, onClick: () -> 
                 )
 
                 Button(
-                    onClick = onAddClick,
+                    onClick = {
+                        onAddClick()
+                    },
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                     modifier = Modifier.height(32.dp)
                 ) {

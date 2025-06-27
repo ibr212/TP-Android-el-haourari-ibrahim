@@ -2,9 +2,11 @@ package com.example.emtyapp.data.source
 
 import com.example.emtyapp.R
 import com.example.emtyapp.data.model.Product
-import kotlinx.coroutines.delay
 
-class LocalProductDataSource : ProductDataSource {
+import kotlinx.coroutines.delay
+import javax.inject.Inject
+
+class LocalProductDataSource @Inject constructor() : ProductDataSource {
     private val products = listOf(
         Product("1", "Smartphone", 599.99, "Écran 6.5\", 128GB Stockage", imageResourceId = R.drawable.smartphone),
         Product("2", "Ordinateur", 1299.99, "16GB RAM, SSD 512GB", imageResourceId = R.drawable.ordinateur),

@@ -1,5 +1,8 @@
 package com.example.emtyapp.data.model
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Product(
     val id: String,
     val name: String,
@@ -7,4 +10,4 @@ data class Product(
     val description: String,
     val imageUrl: String? = null,
     val imageResourceId: Int? = null
-)
+) : Parcelable
